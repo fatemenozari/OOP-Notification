@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace OOP.Notification
 {
     public class RahyabProvider : INotificationProvider
@@ -11,6 +12,16 @@ namespace OOP.Notification
         public NotificationType GetNotificationType()
         {
             return NotificationType.Rahyab;
+        }
+        public bool ActionProvider(List<NotificationType> notificationType)
+        {
+            var provider = this.GetNotificationType();
+            return notificationType.ToList().Contains(provider);
+        }
+
+        public bool StatusProvider()
+        {
+            return true;
         }
 
     }

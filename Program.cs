@@ -1,6 +1,8 @@
 ﻿using OOP.Notification;
 
 var messageService = new MessageService();
+var faraPayamakProvider = new FaraPayamakProvider();
+var rahyabProvider = new RahyabProvider();
 
 var phoneNumbers = new List<string>() { "912123", "933123", "930123", "915345" };
 
@@ -15,29 +17,45 @@ var lastProvider = NotificationType.Rahyab;
 
 var lastPhoneNumbers = new List<string>();
 
-//TODO:For masoud :D
-foreach (var item in notificationTypes)
+if (faraPayamakProvider.StatusProvider() == false)
 {
-    var currentProvider = GetProvider(item);
-
-    foreach (var p in phoneNumbers.Take(x))
+    foreach (var p in phoneNumbers)
     {
         lastPhoneNumbers.Add(p);
-        messageService.Send(p, message, new List<NotificationType>() { currentProvider });
+        messageService.Send(p, message, new List<NotificationType>() { lastProvider });
     }
-    lastProvider = currentProvider;
-
-    //TODO:For marie
-    foreach (var p2 in phoneNumbers.Except(lastPhoneNumbers))
-    {
-        //TODO:For marie
-        var currentProvider2 = GetProvider(lastProvider);
-        messageService.Send(p2, message, new List<NotificationType>() { currentProvider2 });
-    }
-
-    break;
 }
+else if (rahyabProvider.StatusProvider() == false)
+{
+    lastProvider = NotificationType.Farapayamak;
+    foreach (var p in phoneNumbers)
+    {
+        lastPhoneNumbers.Add(p);
+        messageService.Send(p, message, new List<NotificationType>() { lastProvider });
+    }
+}
+else
+{
 
+    foreach (var item in notificationTypes)
+    {
+        var currentProvider = GetProvider(item);
+        foreach (var p in phoneNumbers.Take(x))
+        {
+            lastPhoneNumbers.Add(p);
+            messageService.Send(p, message, new List<NotificationType>() { currentProvider });
+        }
+        lastProvider = currentProvider;
+
+        foreach (var p2 in phoneNumbers.Except(lastPhoneNumbers))
+        {
+            var currentProvider2 = GetProvider(lastProvider);
+            messageService.Send(p2, message, new List<NotificationType>() { currentProvider2 });
+        }
+
+        break;
+    }
+}
 Console.ReadKey();
 
 static NotificationType GetProvider(NotificationType notificationType)

@@ -13,7 +13,10 @@ namespace OOP.Notification
         {
             foreach (var provider in _notificationProviders)
             {
-                provider.Send(to, message);
+                if (provider.ActionProvider(notificationTypes))
+                {
+                    provider.Send(to, message);
+                }
             }
         }
     }
