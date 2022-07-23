@@ -20,7 +20,7 @@ namespace OOP.Notification
         }
         public bool StatusProvider()
         {
-            return false;
+            return true;
         }
         
     }
